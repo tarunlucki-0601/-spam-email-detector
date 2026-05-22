@@ -1,6 +1,8 @@
 import pandas as pd
 import string
+# pyrefly: ignore [missing-import]
 import nltk
+# pyrefly: ignore [missing-import]
 from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -16,6 +18,9 @@ def preprocess_text(text):
     """
     Lowercase text, remove punctuation and stopwords.
     """
+    # Cast to string to handle any potential NaNs or floats from the dataset
+    text = str(text)
+    
     # Lowercase
     text = text.lower()
     # Remove punctuation
@@ -38,8 +43,14 @@ def train_and_save_model():
     print("Preprocessing text...")
     df['clean_message'] = df['message'].apply(preprocess_text)
     
+    # Drop any rows with missing labels
+    df = df.dropna(subset=['label'])
+    
     # Map labels to binary values (spam: 1, ham: 0)
     df['label_num'] = df['label'].map({'ham': 0, 'spam': 1})
+    
+    # Drop any rows where label was not 'ham' or 'spam'
+    df = df.dropna(subset=['label_num'])
 
     X = df['clean_message']
     y = df['label_num']
