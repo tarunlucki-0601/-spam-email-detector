@@ -5,6 +5,9 @@ src_dir = r"C:\Users\Tharun lucki\OneDrive\Desktop\project2"
 dest_dir = r"C:\Users\Tharun lucki\OneDrive\Documents\GitHub\spam-email-detector"
 
 def copy_files():
+    # Ensure destination directory exists
+    os.makedirs(dest_dir, exist_ok=True)
+    
     for item in os.listdir(src_dir):
         # Ignore these folders
         if item in ['.git', 'venv', '__pycache__']:
